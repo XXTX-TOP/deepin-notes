@@ -1,4 +1,4 @@
-\documentclass[a4paper,fontset=fandol,zihao=-4,linespread=1.2]{ctexbook}
+\documentclass[a4paper,fontset=fandol,zihao=-4,linespread=1.2,oneside]{ctexbook}
 
 % \setCJKmainfont{FandolFang-Regular.otf} %中文字体
 \setmainfont[Mapping=tex-text]{PT Mono} %英文字体
@@ -16,12 +16,13 @@
 }
 
 \usepackage{geometry} %布局
-\geometry{top=20mm,bottom=20mm,left=22mm,right=22mm} %页边距
+\geometry{top=20mm,bottom=22mm,left=20mm,right=20mm} %页边距
 
 \usepackage{fancyhdr} % 页眉页脚
 \pagestyle{fancy}
-\fancyfoot[L]{{\textcolor{red!80}{\hspace{0em}Deepin\hspace{0.3em}UOS\hspace{0.3em}笔记编者:XXTXTOP}}}
-
+\fancyfoot[R]{{\textcolor{red!80}{\hspace{0em}XXTXTOP}}}
+%这个地方把页脚内容设置在右边
+\fancyfoot[L]{{\textcolor{green}{\hspace{0em}yuchen Deng}}}
 \usepackage[unicode=false,colorlinks,linkcolor=blue]{hyperref} %超链接
 \usepackage{listings} %代码框
 \usepackage{xunicode} %代码框星号修复
@@ -54,16 +55,20 @@
     \@empty\z@\@empty
 \makeatother
 
-\title{\kaishu {\textcolor{blue!80}{Deepin\hspace{0em}折腾笔记 v6.7}} \footnote{\textcolor{red!80}{本笔记所涉及到的代码或命令需结合上下文说明并理解，不能简单地复制粘贴后在终端执行。}} \ldots}
+\title{\kaishu {\textcolor{blue!80}{Deepin\hspace{0em}折腾笔记 v6.7.1（内部版）}}
+\footnote{\textcolor{red!80}{本笔记所涉及到的代码或命令需结合上下文说明并理解，不能简单地复制粘贴后在终端执行。}} \ldots}
 \author{\fangsong Yuchen Deng / XXTXTOP「{\textcolor{red!80}{\hspace{0em}Deepin\hspace{0.3em}UOS\hspace{0.3em}折腾笔记}}」\footnote{{\textcolor{blue!80}{\hspace{0em}Deepin\hspace{0.3em}UOS\hspace{0.3em}折腾笔记\hspace{0.1em}6.6之前为yuchen Deng著作之后为XXTXTOP续写}}}}
 \date{\kaishu\today}
+
+
 
 \begin{document}
 \maketitle
 \tableofcontents
 
-\chapter{Deepin桌面配置与技巧}
 
+
+\chapter{Deepin桌面配置与技巧}
 \section{Super+S切换工作区}
 \begin{lstlisting}
 Super键就是WIN键。
@@ -97,6 +102,8 @@ Super+L	：锁屏
 \section{加速软件更新}
 \begin{lstlisting}
 控制中心-更新-更新设置，取消“智能软件源”，并切换到“中国科学技术大学”镜像源。
+或者切换到任何离里距离比较近的镜像站，具体的速度情况得自己测试得出。
+UOS只有官方源，不存在其他的源，所以千万不要换源
 \end{lstlisting}
 
 \section{解决安装系统后更新失败}
@@ -114,6 +121,7 @@ https://mp.weixin.qq.com/s/UGX22z_jTZ2BN0BXV54hBw
 也可以更新系统后选择在命令行安装，按下快捷键Ctrl+Alt+T，在弹出的终端中输入命令：
 sudo apt install deepin-appstore
 按提示操作安装完成后，按下Super键（WIN键），就可以找到“应用商店”图标了。
+目前Deepin专业版已经成为历史，由UOS作为商业版本
 \end{lstlisting}
 
 \section{Chrome、VSCode使用自定义标题栏}
@@ -707,6 +715,7 @@ reboot重启。
 或者：
 sudo apt install ntpdate #安装同步时间软件
 sudo ntpdate-debian #网络时间同步
+目前新版本的UOS已经不需要再更改时间，安装完成后，会默认和windows时间保持一致
 \end{lstlisting}
 
 \section{删除不需要的旧内核}
@@ -884,6 +893,8 @@ linux-modules-5.4.28-050428-generic_5.4.28-050428.202003250833_amd64.deb
 单独放在一个目录中，终端下执行：
 sudo dpkg -i *.deb
 重启，然后选择新内核引导项即可。
+
+目前UOS的内核是经过统信公司签名的内核，支持安全启动，所以不建议更换第三方内核，如果非得更换第三方内核，就不再支持安全启动，需要在bios里关闭安全启动。
 \end{lstlisting}
 
 \section{自行编译内核}
@@ -1606,6 +1617,19 @@ Windows启动盘引导进入安装界面，点击“下一步”，再点击左�
 例如我的Windows系统盘符为C，EFI启动分区盘符为F，则可以这样修复：
 bcdboot C:\Windows /s F: /f uefi /l zh-cn
 可以确认：dir F:\EFI，能看到Microsoft目录说明成功。
+\end{lstlisting}
+
+\section{双系统修复ubuntu EFI}
+\begin{lstlisting}
+众所周知，无论是deepin还是UOS都有用ubuntu的引导
+导致，如果ubuntu先安装的话，会被后安装的deepin和UOS覆盖本来的ubuntu引导
+所以我们需要修复引导
+通过安装u盘进入到ubuntu 体验系统就行
+首先，我们需要添加boot-repair所在的源：
+sudo add-apt-repository ppa:yannubuntu/boot-repair && sudo apt-get update
+然后安装：   sudo apt-get install -y boot-repair && boot-repair
+安装完通过命令启动就行，然后点击Recommended repair，过几分钟重启就行了。
+正常情况下，是能够正常修复的!
 \end{lstlisting}
 
 \section{制作USB启动盘}
@@ -2985,5 +3009,18 @@ apt install miniupnpc
 #!/bin/bash
 upnpc -r 18081 TCP 18085 UDP 8836 UDP && mlnet&
 \end{lstlisting}
+\chapter{编者杂谈}
+\section{记录对codimd的部署}
+\begin{lstlisting}
+这次为了多人能够协同的写markdown文件，我在服务器上部署了codimd，来供我们使用
+虽然之前是一直想能在deepin或者debian上部署的，但是过程中遇到了一些问题，国内没有相关的资料
+所以最终还是在centos8上部署了，正好我服务器也是centos8
+\end{lstlisting}
+\section{多333说说}
+\begin{lstlisting}
+	
+我不是很好你好
+\end{lstlisting}
+
 
 \end{document}
