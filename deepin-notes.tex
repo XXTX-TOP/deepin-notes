@@ -2986,7 +2986,15 @@ Alt+F2运行wine，按弹出提示操作，之后配置。
 为：LANG=zh_CN.UTF8 exec "$WINELOADER" "$@"
 注意：如果安装程序时出现崩溃，考虑先还原这一行，安装完成后再恢复。
 \end{lstlisting}
-
+\subsection{通过q4wine对wine程序进行管理}
+\begin{lstlisting}
+我们除了通过winetricks对wine进行配置之外
+还可以通过q4wine（means a Qt (GUI) For Wine）对其进行管理，可以对所有wine的进程进行管理
+他是一个用Qt写的界面程序，我个人使用的kde也是qt写的
+安装q4wine如下：
+sudo apt install q4wine
+\end{lstlisting}
+	
 \section{MlDonkey选项设置}
 \begin{lstlisting}
 Options > Web infos，Remove掉所有项目，清空~/.mldonkey/web_infos目录后添加下面三项：
@@ -3016,10 +3024,23 @@ upnpc -r 18081 TCP 18085 UDP 8836 UDP && mlnet&
 虽然之前是一直想能在deepin或者debian上部署的，但是过程中遇到了一些问题，国内没有相关的资料
 所以最终还是在centos8上部署了，正好我服务器也是centos8
 \end{lstlisting}
-\section{多333说说}
+\section{Debian11的部署}
 \begin{lstlisting}
-	
-我不是很好你好
+这段时间又用起了Debian11，所以聊一下他的部署：
+首先是输入法：apt install fcitx5* # 我一口气安装了所有的包，这样不太好，你也可以选择性的安装！我之后是有所删减的！
+N卡驱动： sudo apt install nvidia-driver
+A核显卡驱动： sudo apt install firmware-amd-graphics amd64-microcode
+网卡驱动：firmware-iwlwifi
+新立得：synaptic
+
+把本用户加入sudo用户组：
+在/etc/sudoers的 root    ALL=(ALL)       ALL
+下一行添加
+user    ALL=(ALL)       ALL
+说明：格式为（用户名   网络中的主机=（执行命令的目标用户）  执行的命令范围）
+
+由于我们要使用dpkg安装软件，所以在 ~/.bashrc 加入下行：
+export PATH=/usr/loca/sbin:/usr/sbin:/sbin:$PATH
 \end{lstlisting}
 
 
