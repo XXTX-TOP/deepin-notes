@@ -2986,6 +2986,31 @@ Alt+F2运行wine，按弹出提示操作，之后配置。
 为：LANG=zh_CN.UTF8 exec "$WINELOADER" "$@"
 注意：如果安装程序时出现崩溃，考虑先还原这一行，安装完成后再恢复。
 \end{lstlisting}
+
+
+\subsection{在debian11上编译wine}
+\begin{lstlisting}
+说在前面的是，wine分为32位和64位，一般我们用的是wine32位，因为大多数Windows程序还是32位的，32位wine只能运行32位应用，64位wine只能运行64位应用。
+
+去下载源代码，这个就不用介绍了，自己去官网找就行，这个都找不到的话，就别编译了
+------------------------------------------
+sudo dpkg --add-architecture i386
+------------------------------------------
+sudo apt update
+------------------------------------------
+sudo apt install flex bison gcc make gcc-mingw-w64 libasound2-dev libpulse-dev libdbus-1-dev libfontconfig1-dev libfreetype6-dev libgnutls28-dev libjpeg62-turbo-dev libpng-dev libtiff-dev libunwind-dev libx11-dev libxml2-dev libxslt1-dev libfaudio-dev libgstreamer1.0-dev libmpg123-dev libosmesa6-dev libudev-dev libvkd3d-dev libvulkan-dev libcapi20-dev liblcms2-dev libcups2-dev libgphoto2-dev libsane-dev libgsm1-dev libkrb5-dev libldap2-dev ocl-icd-opencl-dev libpcap-dev libusb-1.0-0-dev libv4l-dev libopenal-dev libjxr-dev libasound2-dev:i386 libpulse-dev:i386 libdbus-1-dev:i386 libfontconfig1-dev:i386 libfreetype6-dev:i386 libgnutls28-dev:i386 libjpeg62-turbo-dev:i386 libpng-dev:i386 libtiff-dev:i386 libunwind-dev:i386 libx11-dev:i386 libxml2-dev:i386 libxslt1-dev:i386 libfaudio-dev:i386 libgstreamer1.0-dev:i386 libgstreamer-plugins-base1.0-dev:i386 libmpg123-dev:i386 libosmesa6-dev:i386 libsdl2-dev:i386 libudev-dev:i386 libvkd3d-dev:i386 libvulkan-dev:i386 libcapi20-dev:i386 liblcms2-dev:i386 libcups2-dev:i386 libgphoto2-dev:i386 libsane-dev:i386 libgsm1-dev:i386 libkrb5-dev:i386 libldap2-dev:i386 ocl-icd-opencl-dev:i386 libpcap-dev:i386 libusb-1.0-0-dev:i386 libv4l-dev:i386 libopenal-dev:i386 libjxr-dev:i386
+------------------------------------------
+上面这些东西 都是你在64位系统下编译所需要的依赖。
+需要说在前面的是，wine即可以编译出单独的32位版本或者64位版本，也可以编译出32和64位兼具的版本（带有WoW64特性的）。单独的32位版本只能运行32位程序，单独的64位版本只能运行64位程序，且单独的32位版本和64位版本的wine不可以合并共存，没有特殊需求只编译32位版本可以满足大多数需求（毕竟平常大多数程序都是32位的）。我编译的是32位的
+解压了wine源码之后。用cd命令进入解压后的源码所在文件夹，依次执行：
+./configure --disable-win64
+make -j8  # 这个数值根据自己的电脑，自己修改
+编译完成后，执行下列命令来安装：
+sudo make install
+或者可以通过下列命令把wine安装至指定位置：
+make DESTDIR=要安装到的文件夹（绝对路径） install
+
+\end{lstlisting}
 \subsection{通过q4wine对wine程序进行管理}
 \begin{lstlisting}
 我们除了通过winetricks对wine进行配置之外
